@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+  kafka1:
+    image: wurstmeister/kafka
+    container_name: kafka1
+    ports:
+      - "9093:9093"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka1
+      # 需要指定内外网的监听端口，否则会启动失败，无法组成集群
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    volumes:
+     - "D:\\MyAppData\\volume\\kafkacluster\\kafka1\\logs:/kafka"
+     - "D:\\MyAppData\\volume\\kafkacluster\\kafka1\\docker.sock:/var/run/docker.sock"
+    external_links:
+      # 使用外部的zookeeper容器集群，通过内网连接
+      - zoo1
+      - zoo2
+      - zoo3
+    networks:
+      xionDev:
+        ipv4_address: 172.16.1.14
+
+  kafka2:
+    image: wurstmeister/kafka
+    container_name: kafka2
+    ports:
+      - "9094:9094"
+    expose:
+      - "9094"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: kafka2
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka2:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    volumes:
+      - "D:\\MyAppData\\volume\\kafkacluster\\kafka2\\logs:/kafka"
+      - "D:\\MyAppData\\volume\\kafkacluster\\kafka2\\docker.sock:/var/run/docker.sock"
+    external_links:
+      - zoo1
+      - zoo2
+      - zoo3
+    networks:
+      xionDev:
+        ipv4_address: 172.16.1.15
+
+  kafka3:
+    image: wurstmeister/kafka
+    container_name: kafka3
+    ports:
+      - "9095:9095"
+    expose:
+      - "9095"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: kafka3
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka3:9092,OUTSIDE://localhost:9095
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9095
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    volumes:
+      - "D:\\MyAppData\\volume\\kafkacluster\\kafka3\\logs:/kafka"
+      - "D:\\MyAppData\\volume\\kafkacluster\\kafka3\\docker.sock:/var/run/docker.sock"
+    external_links:
+      - zoo1
+      - zoo2
+      - zoo3
+    networks:
+      xionDev:
+        ipv4_address: 172.16.1.16
+
+networks:
+  xionDev:
+    external: 
+      name: xionDev
+      

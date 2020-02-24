@@ -1,0 +1,10 @@
+version: '3'
+services:
+  zookeeper:
+    image: zookeeper:3.4
+    container_name: zookeeper
+    ports:
+    - 2182:2181
+    volumes:
+    - "D:\\MyAppData\\volume\\zkcluster\\zoo\\data:/data"
+    - "D:\\MyAppData\\volume\\zkcluster\\zoo\\datalog:/datalog"
